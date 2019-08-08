@@ -1,0 +1,76 @@
+---
+- name: install needed packages
+  apt:
+    name:
+      - tar
+      - bzip2
+    state: present
+
+- name: create thanos group
+  group:
+    name: "{{ thanos_group }}"
+    system: yes
+    state: present
+
+- name: create thanos user
+  user:
+    name: "{{ thanos_user }}"
+    group: "{{ thanos_group }}"
+    shell: "/sbin/nologin"
+    system: yes
+    createhome: no
+
+- name: create thanos directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ thanos_user }}"
+    group: "{{ thanos_group }}"
+    mode: 0755
+  with_items:
+    - "{{ thanos_root_dir }}"
+    - "{{ thanos_dist_dir }}"
+    - "{{ thanos_config_dir }}"
+    - "{{ thanos_tsdb_dir }}"
+    - "{{ thanos_data_dir }}/compact"
+    - "{{ thanos_data_dir }}/store"
+
+- name: Download thanos server binary
+  get_url:
+    url: "{{ thanos_download_url }}"
+    dest: "{{ thanos_dist_dir }}/{{ thanos_download_fn }}"
+  register: thanos_server
+
+
+- name: Unarchive binary tarball
+  unarchive:
+    copy: no
+    src: "{{ thanos_dist_dir }}/{{ thanos_release_name }}.tar.gz"
+    dest: "{{ thanos_dist_dir }}"
+    creates: "{{ thanos_dist_dir }}/{{ thanos_release_name }}/thanos"
+  when: thanos_server is changed
+  notify: restart thanos
+
+- name: update group and owner for files
+  file:
+    path: "{{ thanos_dist_dir }}/{{ thanos_release_name }}"
+    state: directory
+    recurse: yes
+    owner: "{{ thanos_user }}"
+    group: "{{ thanos_group }}"
+
+- name: create symlink to the current release
+  file:
+    src: "{{ thanos_dist_dir }}/{{ thanos_release_name }}"
+    path: "{{ thanos_root_dir }}/current"
+    state: link
+  notify: restart thanos
+
+- name: Install bucket config
+  copy:
+    content: "{{ thanos_bucket_config }}"
+    dest: "{{ thanos_config_dir }}/bucket_config.yaml"
+    owner: "{{ thanos_user }}"
+    group: "{{ thanos_group }}"
+    mode: 0644
+  notify: restart thanos bucket

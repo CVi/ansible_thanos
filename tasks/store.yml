@@ -1,0 +1,47 @@
+---
+- name: Create store systemd service unit
+  template:
+    src: thanos-store.service.j2
+    dest: /etc/systemd/system/thanos-store.service
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - thanos_store|bool
+  notify: restart thanos-store
+
+- name: Ensure thanos-store service is enabled
+  systemd:
+    daemon_reload: yes
+    name: thanos-store
+    enabled: yes
+  when:
+    - thanos_store|bool
+  notify: restart thanos-store
+
+- name: Check if Service Exists
+  stat:
+    path: /etc/systemd/system/thanos-store.service
+  register: service_status
+  when:
+    - not thanos_store
+    - thanos_remove_unused|bool
+
+- name: Stop thanos store
+  systemd:
+    name: thanos-store
+    state: stopped
+    enabled: yes
+    daemon_reload: yes
+  when:
+    - not thanos_store
+    - thanos_remove_unused|bool
+    - service_status.stat.exists
+
+- name: Remove thanos store
+  file:
+    path: /etc/systemd/system/thanos-store.service
+    state: absent
+  when:
+    - not thanos_store
+    - thanos_remove_unused|bool

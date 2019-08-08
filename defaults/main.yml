@@ -1,0 +1,86 @@
+---
+thanos_version: 0.6.0
+# Defaults to prometheus for sidecar
+thanos_user: prometheus
+thanos_group: prometheus
+
+# Enable services
+thanos_sidecar: no
+thanos_query: no
+thanos_store: no
+thanos_compactor: no
+# Purge disabled services form system
+thanos_remove_unused: yes
+
+# Paths, directories
+thanos_root_dir: /opt/thanos
+thanos_config_dir: /etc/thanos
+thanos_tsdb_dir: /var/lib/prometheus
+thanos_data_dir: /var/lib/thanos
+
+# Paths, files
+thanos_sidecar_pid_path: /var/run/thanos-sidecar.pid
+thanos_query_pid_path: /var/run/thanos-query.pid
+thanos_store_pid_path: /var/run/thanos-store.pid
+thanos_compactor_pid_path: /var/run/thanos-compactor.pid
+
+thanos_bucket_config: ""
+
+# Calculated section uses variable to
+thanos_platform: "linux-{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}"
+thanos_release_name: "thanos-{{ thanos_version }}.{{ thanos_platform }}"
+thanos_download_fn: "{{ thanos_release_name }}.tar.gz"
+thanos_download_url: "https://github.com/thanos-io/thanos/releases/download/v{{ thanos_version }}/{{ thanos_download_fn }}"
+
+thanos_dist_dir: "{{ thanos_root_dir }}/dist"
+thanos_bin_dir: "{{ thanos_root_dir }}/current"
+
+thanos_sidecar_web_listen_port: "19191"
+thanos_sidecar_web_listen_address: "0.0.0.0:{{ thanos_sidecar_web_listen_port }}"
+thanos_query_web_listen_port: "19192"
+thanos_query_web_listen_address: "0.0.0.0:{{ thanos_query_web_listen_port }}"
+thanos_store_web_listen_port: "19193"
+thanos_store_web_listen_address: "0.0.0.0:{{ thanos_store_web_listen_port }}"
+thanos_compactor_web_listen_port: "19194"
+thanos_compactor_web_listen_address: "0.0.0.0:{{ thanos_compactor_web_listen_port }}"
+
+thanos_sidecar_grpc_listen_port: "19181"
+thanos_sidecar_grpc_listen_address: "0.0.0.0:{{ thanos_sidecar_grpc_listen_port }}"
+thanos_query_grpc_listen_port: "19182"
+thanos_query_grpc_listen_address: "0.0.0.0:{{ thanos_query_grpc_listen_port }}"
+thanos_store_grpc_listen_port: "19183"
+thanos_store_grpc_listen_address: "0.0.0.0:{{ thanos_store_grpc_listen_port }}"
+
+thanos_web_prometheus_url: 'http://localhost:9090/'
+
+thanos_query_stores: ""
+thanos_query_replica_label: replica
+
+thanos_sidecar_flags: >-
+        --tsdb.path {{thanos_tsdb_dir}}
+        --objstore.config-file {{thanos_config_dir}}/bucket_config.yaml
+        --prometheus.url {{thanos_web_prometheus_url}}
+        --http-address {{thanos_sidecar_web_listen_address}}
+        --grpc-address {{thanos_sidecar_grpc_listen_address}}
+
+thanos_query_flags: >-
+        --http-address {{ thanos_query_web_listen_address }}
+        --grpc-address {{ thanos_query_grpc_listen_address }}
+        --query.replica-label {{ thanos_query_replica_label }}
+        {{ thanos_query_stores }}
+
+thanos_store_flags: >-
+        --data-dir {{ thanos_data_dir }}/store
+        --objstore.config-file {{ thanos_config_dir }}/bucket_config.yaml
+        --http-address {{ thanos_store_web_listen_address }}
+        --grpc-address {{ thanos_store_grpc_listen_address }}
+
+thanos_compactor_flags: >-
+        --data-dir {{ thanos_data_dir }}/compact
+        --objstore.config-file {{thanos_config_dir}}/bucket_config.yaml
+        --http-address {{ thanos_compactor_web_listen_address }}
+        --consistency-delay  {{ thanos_compactor_delay | default("120m") }}
+        --retention.resolution-raw {{ thanos_raw_retention | default("30d") }}
+        --retention.resolution-5m {{ thanos_5m_retention | default("180d") }}
+        --retention.resolution-1h {{ thanos_1h_retention | default("7300d") }}
+        --wait

@@ -1,0 +1,47 @@
+---
+- name: Create query systemd service unit
+  template:
+    src: thanos-query.service.j2
+    dest: /etc/systemd/system/thanos-query.service
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - thanos_query|bool
+  notify: restart thanos-query
+
+- name: Ensure thanos-query service is enabled
+  systemd:
+    daemon_reload: yes
+    name: thanos-query
+    enabled: yes
+  when:
+    - thanos_query|bool
+  notify: restart thanos-query
+
+- name: Check if Service Exists
+  stat:
+    path: /etc/systemd/system/thanos-query.service
+  register: service_status
+  when:
+    - not thanos_query
+    - thanos_remove_unused|bool
+
+- name: Stop thanos query
+  systemd:
+    name: thanos-query
+    state: stopped
+    enabled: yes
+    daemon_reload: yes
+  when:
+    - not thanos_query
+    - thanos_remove_unused|bool
+    - service_status.stat.exists
+
+- name: Remove thanos query
+  file:
+    path: /etc/systemd/system/thanos-query.service
+    state: absent
+  when:
+    - not thanos_query
+    - thanos_remove_unused|bool

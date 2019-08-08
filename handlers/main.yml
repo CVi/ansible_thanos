@@ -1,0 +1,47 @@
+---
+- name: Restart sidecar service
+  listen:
+    - restart thanos
+    - restart thanos-sidecar
+    - restart thanos bucket
+  systemd:
+    name: thanos-sidecar
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: thanos_sidecar|bool
+
+- name: Restart query service
+  listen:
+    - restart thanos
+    - restart thanos-query
+  systemd:
+    name: thanos-query
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: thanos_query|bool
+
+- name: Restart store service
+  listen:
+    - restart thanos
+    - restart thanos-store
+    - restart thanos bucket
+  systemd:
+    name: thanos-store
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: thanos_store|bool
+
+- name: Restart compactor service
+  listen:
+    - restart thanos
+    - restart thanos-compactor
+    - restart thanos bucket
+  systemd:
+    name: thanos-compactor
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: thanos_compactor|bool

@@ -1,0 +1,15 @@
+---
+- name: Install thanos
+  include_tasks: install.yml
+
+- name: Thanos sidecar
+  include_tasks: sidecar.yml
+
+- name: Thanos query
+  include_tasks: query.yml
+
+- name: Thanos store
+  include_tasks: store.yml
+
+- name: Thanos compactor
+  include_tasks: compactor.yml

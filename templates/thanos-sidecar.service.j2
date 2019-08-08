@@ -1,0 +1,17 @@
+[Unit]
+Description=Thanos Sidecar
+After=network.target
+
+[Service]
+Type=simple
+PIDFile={{ thanos_sidecar_pid_path }}
+User={{ thanos_user }}
+Group={{ thanos_group }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart={{ thanos_bin_dir }}/thanos sidecar {{ thanos_sidecar_flags }}
+
+SyslogIdentifier=thanos-sidecar
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

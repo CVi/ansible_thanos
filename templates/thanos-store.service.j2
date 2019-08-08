@@ -1,0 +1,17 @@
+[Unit]
+Description=Thanos Store
+After=network.target
+
+[Service]
+Type=simple
+PIDFile={{ thanos_store_pid_path }}
+User={{ thanos_user }}
+Group={{ thanos_group }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart={{ thanos_bin_dir }}/thanos store {{ thanos_store_flags }}
+
+SyslogIdentifier=thanos-store
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

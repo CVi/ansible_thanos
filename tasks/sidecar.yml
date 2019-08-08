@@ -1,0 +1,47 @@
+---
+- name: Create sidecar systemd service unit
+  template:
+    src: thanos-sidecar.service.j2
+    dest: /etc/systemd/system/thanos-sidecar.service
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - thanos_sidecar|bool
+  notify: restart thanos-sidecar
+
+- name: Ensure thanos-sidecar service is enabled
+  systemd:
+    daemon_reload: yes
+    name: thanos-sidecar
+    enabled: yes
+  when:
+    - thanos_sidecar|bool
+  notify: restart thanos-sidecar
+
+- name: Check if Service Exists
+  stat:
+    path: /etc/systemd/system/thanos-sidecar.service
+  register: service_status
+  when:
+    - not thanos_sidecar
+    - thanos_remove_unused|bool
+
+- name: Stop thanos sidecar
+  systemd:
+    name: thanos-sidecar
+    state: stopped
+    enabled: yes
+    daemon_reload: yes
+  when:
+    - not thanos_sidecar
+    - thanos_remove_unused|bool
+    - service_status.stat.exists
+
+- name: Remove thanos sidecar
+  file:
+    path: /etc/systemd/system/thanos-sidecar.service
+    state: absent
+  when:
+    - not thanos_sidecar
+    - thanos_remove_unused|bool

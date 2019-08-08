@@ -1,0 +1,17 @@
+[Unit]
+Description=Thanos Compactor
+After=network.target
+
+[Service]
+Type=simple
+PIDFile={{ thanos_compactor_pid_path }}
+User={{ thanos_user }}
+Group={{ thanos_group }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart={{ thanos_bin_dir }}/thanos compact {{ thanos_compactor_flags }}
+
+SyslogIdentifier=thanos-compactor
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
