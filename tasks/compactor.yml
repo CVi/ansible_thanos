@@ -37,6 +37,7 @@
     - not thanos_compactor
     - thanos_remove_unused|bool
     - service_status.stat.exists
+    - ansible_service_mgr == 'systemd'
 
 - name: Remove thanos compactor
   file:
@@ -45,3 +46,4 @@
   when:
     - not thanos_compactor
     - thanos_remove_unused|bool
+    - ansible_service_mgr == 'systemd'

@@ -7,9 +7,10 @@
   systemd:
     name: thanos-sidecar
     state: restarted
-    enabled: yes
     daemon_reload: yes
-  when: thanos_sidecar|bool
+  when:
+    - thanos_sidecar|bool
+    - ansible_service_mgr == 'systemd'
 
 - name: Restart query service
   listen:
@@ -18,9 +19,10 @@
   systemd:
     name: thanos-query
     state: restarted
-    enabled: yes
     daemon_reload: yes
-  when: thanos_query|bool
+  when:
+    - thanos_query|bool
+    - ansible_service_mgr == 'systemd'
 
 - name: Restart store service
   listen:
@@ -30,9 +32,10 @@
   systemd:
     name: thanos-store
     state: restarted
-    enabled: yes
     daemon_reload: yes
-  when: thanos_store|bool
+  when:
+    - thanos_store|bool
+    - ansible_service_mgr == 'systemd'
 
 - name: Restart compactor service
   listen:
@@ -42,6 +45,7 @@
   systemd:
     name: thanos-compactor
     state: restarted
-    enabled: yes
     daemon_reload: yes
-  when: thanos_compactor|bool
+  when:
+    - thanos_compactor|bool
+    - ansible_service_mgr == 'systemd'

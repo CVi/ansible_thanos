@@ -3,3 +3,8 @@
   hosts: all
   roles:
     - role: cvi.thanos
+      thanos_sidecar: no
+      thanos_query: no
+      thanos_store: no
+      thanos_compactor: no
+    - role: cvi.thanos
