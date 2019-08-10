@@ -8,6 +8,8 @@ Requirements
 
 This role does not deploy Prometheus. Installing prometheus must be installed by another role.
 
+This role should work on every linux system with an amd64 or arm64 CPU and systemd.
+
 Role Variables
 --------------
 
@@ -32,7 +34,6 @@ Role Variables
 | thanos_remove_unused | yes           | Uninstall and/or remove all serivices that are not set to be installed on this host.|
 
 ### Paths ###
-
 | Name           | Default Value | Description                                |
 | --------------------- | ------------- | ----------------------------------- |
 | thanos_root_dir       | /opt/thanos   | Thanos installation root path       |
@@ -98,9 +99,20 @@ Since it does not have any thanos_bucket_config, it will not enable long-term st
 
     - hosts: prometheus-servers
       roles:
-         - role: cvi.thanos
-           thanos_sidecar: yes
+        - role: cvi.thanos
+          thanos_sidecar: yes
 
+The following playbook will install a thanos query service and query from the sidecars
+deployed above.
+
+    - hosts: thanos-query
+      roles:
+        - role: cvi.thanos
+          thanos_query: yes
+          thanos_query_stores: >-
+             {% for host in groups['prometheus-servers'] | sort %}
+             --store {{ host }}:{{ hostvars[host]['thanos_sidecar_grpc_listen_port'] | default(19181) }}
+             {% endfor %}
 
 
 License
