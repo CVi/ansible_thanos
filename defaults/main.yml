@@ -9,7 +9,7 @@ thanos_sidecar: no
 thanos_query: no
 thanos_store: no
 thanos_compactor: no
-# Purge disabled services form system
+# Purge disabled services from system
 thanos_remove_unused: yes
 
 # Paths, directories
