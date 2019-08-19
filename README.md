@@ -6,9 +6,16 @@ Deploy [Thanos](https://thanos.io/) Prometheus extension using ansible.
 Requirements
 ------------
 
-This role does not deploy Prometheus. Installing prometheus must be installed by another role.
+This role does not deploy Prometheus. Installing prometheus must be installed
+by another role.
 
-This role should work on every linux system with an amd64 or arm64 CPU and systemd.
+This role should work on every linux system with an amd64 or arm64 CPU and
+systemd and apt package management.
+
+For testing purposes all systemd-invocations are skipped if systemd is not
+the init daemon on, the system is not systemd, but it will still create the
+systemd service unit. If you want to use this role on an operatingsystem 
+without systemd be aware of this limitation.
 
 Role Variables
 --------------
