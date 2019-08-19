@@ -1,6 +1,6 @@
 ---
 - name: install needed packages
-  apt:
+  package:
     name:
       - tar
       - bzip2

@@ -10,7 +10,8 @@ This role does not deploy Prometheus. Installing prometheus must be installed
 by another role.
 
 This role should work on every linux system with an amd64 or arm64 CPU and
-systemd and apt package management.
+systemd. If tar and bzip2 are not available in the package manager under
+those names, this role will fail.
 
 For testing purposes all systemd-invocations are skipped if systemd is not
 the init daemon on, the system is not systemd, but it will still create the
