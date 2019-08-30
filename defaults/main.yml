@@ -56,17 +56,21 @@ thanos_web_prometheus_url: 'http://localhost:9090/'
 thanos_query_stores: ""
 thanos_query_replica_label: replica
 
+thanos_log_format: json
+
 thanos_sidecar_flags: >-
         --tsdb.path {{thanos_tsdb_dir}}
         --objstore.config-file {{thanos_config_dir}}/bucket_config.yaml
         --prometheus.url {{thanos_web_prometheus_url}}
         --http-address {{thanos_sidecar_web_listen_address}}
         --grpc-address {{thanos_sidecar_grpc_listen_address}}
+        --log.format={{ thanos_log_format }}
 
 thanos_query_flags: >-
         --http-address {{ thanos_query_web_listen_address }}
         --grpc-address {{ thanos_query_grpc_listen_address }}
         --query.replica-label {{ thanos_query_replica_label }}
+        --log.format={{ thanos_log_format }}
         {{ thanos_query_stores }}
 
 thanos_store_flags: >-
@@ -74,6 +78,7 @@ thanos_store_flags: >-
         --objstore.config-file {{ thanos_config_dir }}/bucket_config.yaml
         --http-address {{ thanos_store_web_listen_address }}
         --grpc-address {{ thanos_store_grpc_listen_address }}
+        --log.format={{ thanos_log_format }}
 
 thanos_compactor_flags: >-
         --data-dir {{ thanos_data_dir }}/compact
@@ -83,4 +88,5 @@ thanos_compactor_flags: >-
         --retention.resolution-raw {{ thanos_raw_retention | default("30d") }}
         --retention.resolution-5m {{ thanos_5m_retention | default("180d") }}
         --retention.resolution-1h {{ thanos_1h_retention | default("7300d") }}
+        --log.format={{ thanos_log_format }}
         --wait

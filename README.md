@@ -80,6 +80,7 @@ Role Variables
 | thanos_web_prometheus_url  | http://localhost:9090/ | Address of local Prometheus (for sidecar) |
 | thanos_query_stores        | (empty string)         | List of store flags to pass to querier |
 | thanos_query_replica_label | replica                | Label that  distinguish replica set in HA configurations, for deduplication. |
+| thanos_log_firmat          | json                   | Log format to use for services | 
 
 
 ### Service cli flags ###
