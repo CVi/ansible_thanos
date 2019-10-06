@@ -54,7 +54,7 @@ scenario:
     - destroy
     - syntax
     - create
-    - prepare
+    # - prepare
     - converge
     - idempotence
     # - side_effect
