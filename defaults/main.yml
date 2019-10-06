@@ -1,5 +1,5 @@
 ---
-thanos_version: 0.6.0
+thanos_version: 0.7.0
 # Defaults to prometheus for sidecar
 thanos_user: prometheus
 thanos_group: prometheus

@@ -17,6 +17,7 @@
     enabled: yes
   when:
     - thanos_compactor|bool
+    - ansible_service_mgr == 'systemd'
   notify: restart thanos-compactor
 
 - name: Check if Service Exists

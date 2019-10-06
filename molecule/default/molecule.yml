@@ -1,15 +1,19 @@
 ---
 dependency:
   name: galaxy
+
 driver:
   name: docker
+
 lint:
   name: yamllint
+
 platforms:
   - name: Ubuntu_Bionic
     image: ubuntu:bionic
   - name: Ubuntu_Xenial
     image: ubuntu:xenial
+
   - name: Debian_Buster
     image: debian:buster
   - name: Debian_Stretch
@@ -17,11 +21,43 @@ platforms:
   - name: Debian_Jessie
     image: debian:jessie
 
+  - name: Centos_7.0
+    image: centos:7.0.1406
+  - name: Centos_7.1
+    image: centos:7.1.1503
+  - name: Centos_7.2
+    image: centos:7.2.1511
+  - name: Centos_7.3
+    image: centos:7.3.1611
+  - name: Centos_7.4
+    image: centos:7.4.1708
+  - name: Centos_7.5
+    image: centos:7.5.1804
+  - name: Centos_7.6
+    image: centos:7.6.1810
+
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
+
 verifier:
   name: testinfra
   lint:
     name: flake8
+
+scenario:
+  test_sequence:
+    - lint
+    # - dependency
+    # - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    # - side_effect
+    - verify
+    # - cleanup
+    - destroy

@@ -14,11 +14,16 @@ galaxy_info:
       versions:
         - xenial
         - bionic
+
     - name: Debian
       versions:
         - buster
         - stretch
         - jessie
+
+    - name: EL
+      versions:
+        - '7'
 
   galaxy_tags:
     - thanos

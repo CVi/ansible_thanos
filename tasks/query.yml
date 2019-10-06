@@ -17,6 +17,7 @@
     enabled: yes
   when:
     - thanos_query|bool
+    - ansible_service_mgr == 'systemd'
   notify: restart thanos-query
 
 - name: Check if Service Exists

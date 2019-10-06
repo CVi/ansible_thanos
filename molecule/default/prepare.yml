@@ -2,7 +2,14 @@
 - name: Prepare
   hosts: all
   tasks:
-    - name: Install iproute
+    - name: Install iproute (Debian)
       package:
         name: iproute2
         state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install iproute (Redhat)
+      package:
+        name: iproute
+        state: present
+      when: ansible_os_family == "RedHat"

@@ -17,6 +17,7 @@
     enabled: yes
   when:
     - thanos_sidecar|bool
+    - ansible_service_mgr == 'systemd'
   notify: restart thanos-sidecar
 
 - name: Check if Service Exists
@@ -46,4 +47,3 @@
   when:
     - not thanos_sidecar
     - thanos_remove_unused|bool
-    - ansible_service_mgr == 'systemd'

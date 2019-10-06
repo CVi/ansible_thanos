@@ -17,6 +17,7 @@
     enabled: yes
   when:
     - thanos_store|bool
+    - ansible_service_mgr == 'systemd'
   notify: restart thanos-store
 
 - name: Check if Service Exists
