@@ -1,6 +1,7 @@
 ---
 - name: Install thanos
   include_tasks: install.yml
+  when: thanos_skip_install
 
 - name: Thanos sidecar
   include_tasks: sidecar.yml

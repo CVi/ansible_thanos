@@ -1,5 +1,6 @@
 ---
 thanos_version: 0.8.1
+thanos_skip_install: false
 # Defaults to prometheus for sidecar
 thanos_user: prometheus
 thanos_group: prometheus

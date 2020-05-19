@@ -26,6 +26,7 @@ Role Variables
 | Name                 | Default Value  | Description                         |
 | -------------------- | -------------- | ----------------------------------- |
 | thanos_version       | 0.6.0          | Version of thanos to install        |
+| thanos_skip_install  | false          | Skipping installation and only configure thanos |
 | thanos_user          | prometheus     | User thanos is run as, defaults to prometheus to play well as sidecar |
 | thanos_group         | prometheus     | Group thanos is run as, defaults to prometheus to play well as sidecar |
 | thanos_bucket_config | (empty string) | The contents of the objstore config-file as a string |
