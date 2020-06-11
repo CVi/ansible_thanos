@@ -50,6 +50,7 @@ thanos_query_grpc_listen_port: "19182"
 thanos_query_grpc_listen_address: "0.0.0.0:{{ thanos_query_grpc_listen_port }}"
 thanos_store_grpc_listen_port: "19183"
 thanos_store_grpc_listen_address: "0.0.0.0:{{ thanos_store_grpc_listen_port }}"
+thanos_store_open_files_limit: 8192
 
 thanos_web_prometheus_url: 'http://localhost:9090/'
 
