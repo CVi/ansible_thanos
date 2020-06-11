@@ -9,6 +9,7 @@ User={{ thanos_user }}
 Group={{ thanos_group }}
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStart={{ thanos_bin_dir }}/thanos store {{ thanos_store_flags }}
+LimitNOFILE={{ thanos_store_open_files_limit }}
 
 SyslogIdentifier=thanos-store
 Restart=always
