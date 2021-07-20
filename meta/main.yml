@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  namespace: cvi
   role_name: thanos
   author: Christoffer Viken
   description: Thanos.io Prometheus storage
