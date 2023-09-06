@@ -109,9 +109,9 @@ Since it does not have any thanos_bucket_config, it will not enable long-term st
     - hosts: prometheus-servers
       roles:
         - role: cvi.thanos
-          become: yes
+          become: true
           # Vars
-          thanos_sidecar: yes
+          thanos_sidecar: true
 
 The following playbook will install a thanos query service and query from the sidecars
 deployed above.
@@ -119,9 +119,9 @@ deployed above.
     - hosts: thanos-query
       roles:
         - role: cvi.thanos
-          become: yes
+          become: true
           # Vars
-          thanos_query: yes
+          thanos_query: true
           thanos_query_stores: >-
              {% for host in groups['prometheus-servers'] | sort %}
              --store {{ host }}:{{ hostvars[host]['thanos_sidecar_grpc_listen_port'] | default(19181) }}

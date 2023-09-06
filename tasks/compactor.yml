@@ -12,9 +12,9 @@
 
 - name: Ensure thanos-compactor service is enabled
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
     name: thanos-compactor
-    enabled: yes
+    enabled: true
   when:
     - thanos_compactor|bool
     - ansible_service_mgr == 'systemd'
@@ -32,8 +32,8 @@
   systemd:
     name: thanos-compactor
     state: stopped
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   when:
     - not thanos_compactor
     - thanos_remove_unused|bool
