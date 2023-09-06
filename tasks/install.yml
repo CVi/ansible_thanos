@@ -9,7 +9,7 @@
 - name: create thanos group
   group:
     name: "{{ thanos_group }}"
-    system: yes
+    system: true
     state: present
 
 - name: create thanos user
@@ -17,8 +17,8 @@
     name: "{{ thanos_user }}"
     group: "{{ thanos_group }}"
     shell: "/sbin/nologin"
-    system: yes
-    createhome: no
+    system: true
+    createhome: false
 
 - name: create thanos directories
   file:
@@ -44,7 +44,7 @@
 
 - name: Unarchive binary tarball
   unarchive:
-    copy: no
+    copy: false
     src: "{{ thanos_dist_dir }}/{{ thanos_release_name }}.tar.gz"
     dest: "{{ thanos_dist_dir }}"
     creates: "{{ thanos_dist_dir }}/{{ thanos_release_name }}/thanos"
@@ -55,7 +55,7 @@
   file:
     path: "{{ thanos_dist_dir }}/{{ thanos_release_name }}"
     state: directory
-    recurse: yes
+    recurse: true
     owner: "{{ thanos_user }}"
     group: "{{ thanos_group }}"
 

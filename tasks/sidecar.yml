@@ -12,9 +12,9 @@
 
 - name: Ensure thanos-sidecar service is enabled
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
     name: thanos-sidecar
-    enabled: yes
+    enabled: true
   when:
     - thanos_sidecar|bool
     - ansible_service_mgr == 'systemd'
@@ -32,8 +32,8 @@
   systemd:
     name: thanos-sidecar
     state: stopped
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   when:
     - not thanos_sidecar
     - thanos_remove_unused|bool
