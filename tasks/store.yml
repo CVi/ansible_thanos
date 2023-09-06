@@ -12,9 +12,9 @@
 
 - name: Ensure thanos-store service is enabled
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
     name: thanos-store
-    enabled: yes
+    enabled: true
   when:
     - thanos_store|bool
     - ansible_service_mgr == 'systemd'
@@ -32,8 +32,8 @@
   systemd:
     name: thanos-store
     state: stopped
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   when:
     - not thanos_store
     - thanos_remove_unused|bool

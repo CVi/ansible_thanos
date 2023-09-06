@@ -3,7 +3,7 @@
   hosts: all
   roles:
     - role: cvi.thanos
-      thanos_sidecar: yes
-      thanos_query: yes
-      thanos_store: yes
-      thanos_compactor: yes
+      thanos_sidecar: true
+      thanos_query: true
+      thanos_store: true
+      thanos_compactor: true

@@ -6,12 +6,12 @@ thanos_user: prometheus
 thanos_group: prometheus
 
 # Enable services
-thanos_sidecar: no
-thanos_query: no
-thanos_store: no
-thanos_compactor: no
+thanos_sidecar: false
+thanos_query: false
+thanos_store: false
+thanos_compactor: false
 # Purge disabled services from system
-thanos_remove_unused: yes
+thanos_remove_unused: true
 
 # Paths, directories
 thanos_root_dir: /opt/thanos
